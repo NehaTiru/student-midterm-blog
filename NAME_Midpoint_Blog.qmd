@@ -1,40 +1,53 @@
 ---
-title: "NAME's Introduction"
-author: "NAME"
+title: "Neha Tirunagiri midterm-blog"
+author: "Neha Tirunagiri"
 date: "2024-02-05"
 categories: ["Midpoint Reflection"]
 ---
 
-Write your answers to the questions here. Don't forget to update the metadata information above. Look through the [Markdown Guide](https://quarto.org/docs/authoring/markdown-basics.html) to format your text the way that you want it to be rendered.
+<style>
+body {
+  background-color: #ecf8f3; 
+}
+</style>
 
-![A picture you want to link here](imgs/The_Image.jpg)
 
-## Assignment Objectives
-For your first submission, you were asked to submit an introductory blog of yourself that outlined areas of 
-interest in your learning and other personal goals throughout the DSPG program. This blog will be a reflection 
-of the progress you are making as the program reaches the midpoint. 
+![ ](imgs/ ai_housing_image.png){width="431"}
 
-## What to Include in This Blog
-As you prepare this blog, please share some of the work you've been doing. This is a way for external audiences
-to see the skills you've been building throughout the program. The context of the blog should include
-some answers to the following questions.
+### What have you been learning so far?
 
-- What have you been learning so far?
-  - This encompasses both the technical and non technical knowledge you're gaining.
-  - What are some new skills you've picked up & skills you're developing from before?
-- Demonstrate some of the work from your learning.
-  - This could be an example of a data transformation code, a visualization, a map, etc.
-- Indicate any new directions of learning that you've been pursuing during the program. 
-  - Why are you pursuing them?
-- What skills are you hoping to improve for the rest of the program?
-- Do you think that you're meeting the goals you've outlined at the start of the program?
+-   <span style="color: green;">I'm currently working on an AI & Housing project in the DSPG program, and it's been a great learning experience.I've been improving my programming skills in Python, learning how to process images, and exploring data. I also started using PyTorch, which is helping me understand more about how AI works.
 
-## Before Submitting Your Assignment 
+-   <span style="color: green;">Another cool tool I’ve been using is the leaflet package. It lets us turn data into maps that you can interact with. We’re trying to combine these maps with AI to make them even more user-friendly.
 
-- Please update everything except the `categories: ["Midpoint Reflection"]` in the YAML metadata section of your `NAME_Midpoint_Blog.qmd` file. 
-- Replace the `NAME` section of the `NAME_Midpoint_Blog.qmd` file with your first name. 
-- If you are including any images, place them in the `imgs\` folder and follow the guidelines discussed in the [Blog Writing Guidelines post](add link) for adding images.
-  - The same practice holds for data to be in the `data` folder.
+-   <span style="color: green;">Alongside Python, I've been picking up some skills in R programming. This has been a new area for me, and I’ve enjoyed learning how to create blogs in R and getting to know my way around RStudio.
+
+-   <span style="color: green;">I’m excited about all these new skills because they help me do more with technology and make things easier for others to understand.
+
+### Demonstrate some of the work from your learning.
+
+-   
+
+
+### New Directions in Learning
+
+- <span style="color: orange;">During the program,I've been learning about new technology, which is important for my future. AI is a big part of this, and I’m excited because it’s something that can really help in many jobs today.
+
+
+### Skills I Want to Improve
+
+- <span style="color: orange;">For the rest of the program, I want to get better at using Python and working with AI. I also want to be better at making maps from data. These skills will help me do my projects better and faster. I also want to work on being a good team player and communicating well with others.
+
+### Am I Meeting My Goals?
+
+- <span style="color: orange;">Yes, I think I am. When I started this program, I set some goals for what I wanted to learn and do. So far, I feel like I'm on the right path and making good progress. I’m using what I learn, and I'm excited to keep going and learn more.
+
+## Before Submitting Your Assignment
+
+-   Please update everything except the `categories: ["Midpoint Reflection"]` in the YAML metadata section of your `NAME_Midpoint_Blog.qmd` file.
+-   Replace the `NAME` section of the `NAME_Midpoint_Blog.qmd` file with your first name.
+-   If you are including any images, place them in the `imgs\` folder and follow the guidelines discussed in the [Blog Writing Guidelines post](add%20link) for adding images.
+    -   The same practice holds for data to be in the `data` folder.
 -   Render the blog post locally on your device to make sure that it can render correctly. If you are in RStudio, you can use the Render icon or hit `Ctrl+Shift+K` on Windows and `Shift-Command-K` on Mac.
 
 ## Using Python Code Chunks
