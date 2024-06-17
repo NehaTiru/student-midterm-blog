@@ -5,61 +5,14 @@ date: "2024-02-05"
 categories: ["Midpoint Reflection"]
 ---
 
-<style>
-body {
-  background-color: #ecf8f3; 
-}
-</style>
-
-
-![ ](imgs/ ai_housing_image.png){width="431"}
-
-### What have you been learning so far?
-
--   <span style="color: green;">I'm currently working on an AI & Housing project in the DSPG program, and it's been a great learning experience.I've been improving my programming skills in Python, learning how to process images, and exploring data. I also started using PyTorch, which is helping me understand more about how AI works.
-
--   <span style="color: green;">Another cool tool I’ve been using is the leaflet package. It lets us turn data into maps that you can interact with. We’re trying to combine these maps with AI to make them even more user-friendly.
-
--   <span style="color: green;">Alongside Python, I've been picking up some skills in R programming. This has been a new area for me, and I’ve enjoyed learning how to create blogs in R and getting to know my way around RStudio.
-
--   <span style="color: green;">I’m excited about all these new skills because they help me do more with technology and make things easier for others to understand.
-
-### Demonstrate some of the work from your learning.
-
--   
-
-
-### New Directions in Learning
-
-- <span style="color: orange;">During the program,I've been learning about new technology, which is important for my future. AI is a big part of this, and I’m excited because it’s something that can really help in many jobs today.
-
-
-### Skills I Want to Improve
-
-- <span style="color: orange;">For the rest of the program, I want to get better at using Python and working with AI. I also want to be better at making maps from data. These skills will help me do my projects better and faster. I also want to work on being a good team player and communicating well with others.
-
-### Am I Meeting My Goals?
-
-- <span style="color: orange;">Yes, I think I am. When I started this program, I set some goals for what I wanted to learn and do. So far, I feel like I'm on the right path and making good progress. I’m using what I learn, and I'm excited to keep going and learn more.
-
-## Before Submitting Your Assignment
-
--   Please update everything except the `categories: ["Midpoint Reflection"]` in the YAML metadata section of your `NAME_Midpoint_Blog.qmd` file.
--   Replace the `NAME` section of the `NAME_Midpoint_Blog.qmd` file with your first name.
--   If you are including any images, place them in the `imgs\` folder and follow the guidelines discussed in the [Blog Writing Guidelines post](add%20link) for adding images.
-    -   The same practice holds for data to be in the `data` folder.
--   Render the blog post locally on your device to make sure that it can render correctly. If you are in RStudio, you can use the Render icon or hit `Ctrl+Shift+K` on Windows and `Shift-Command-K` on Mac.
-
-## Using Python Code Chunks
-
-If you are using python in your code chunks you will need to run the following at the top of your code, after the library imports. Set the following chunks to `eval=TRUE`.
-
-```{r}
+```{r setup, include=FALSE}
+#| echo = FALSE
 # Library for running python code in RStudio.
 library(reticulate)
 ```
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
+#| echo = FALSE
 # Check for virtual environment, if it doesn't exist, create the venv, if it exists
 # then use the venv called "r-python"
 
@@ -71,8 +24,297 @@ if (virtualenv_exists("r-python")) {
 }
 ```
 
-```{r, eval=FALSE}
+```{r, eval=TRUE, message=FALSE}
+#| echo: FALSE
+#| output: FALSE
 # Installing dependencies for the python virtualenv
 
-virtualenv_install(envname = "r-python", packages = c("numpy", "pandas", "scikit-learn"), all = TRUE)
+virtualenv_install(envname = "r-python", packages = c("numpy", "pandas", "scikit-learn", "folium","shapely", "geopandas", "branca"), all = TRUE)
 ```
+
+```{python}
+#| echo: false
+#| output: false
+import pandas as pd
+print("Currently using Pandas Version:", pd.__version__)
+```
+
+
+```{=html}
+<style>
+body {
+  background-color: #ecf8f3; 
+}
+</style>
+```
+![](imgs/%20ai_housing_image.png){width="900" height="400"}
+
+### <span style="color: Orange;">What have you been learning so far?
+
+-   <span style="color: green;">I'm currently working on an AI & Housing project in the DSPG program, and it's been a great learning experience.I've been improving my programming skills in Python, learning how to process images, and exploring data. I also started using PyTorch, which is helping me understand more about how AI works.
+
+-   <span style="color: green;">Another cool tool I’ve been using is the leaflet package. It lets us turn data into maps that you can interact with. We’re trying to combine these maps with AI to make them even more user-friendly.
+
+-   <span style="color: green;">Alongside Python, I've been picking up some skills in R programming. This has been a new area for me, and I’ve enjoyed learning how to create blogs in R and getting to know my way around RStudio.
+
+-   <span style="color: green;">I’m excited about all these new skills because they help me do more with technology and make things easier for others to understand.
+
+### <span style="color: Orange;">Demonstrate some of the work from your learning.
+
+-   <span style="color: green;">Image Processing Activity
+
+::: {layout-nrow="1"}
+![](imgs/RGB_image.jpg){width="336"}
+![](imgs/Grayscale_image.jpg){width="336"}
+
+![](imgs/Binarized_image.jpg){width="336"}
+![](imgs/Edge_image.jpg){width="336"}
+:::
+
+- <span style="color: green;">Leaflet Map Visualization
+
+
+### <span style="color: brown;">Low-Income Block Group Level map
+
+```{python,message = FALSE}
+#| output: false
+#| echo: false
+#| message: false
+import folium
+import pandas as pd
+import json
+from shapely.geometry import shape
+from folium.plugins import MarkerCluster, Search
+
+income_data = pd.read_csv('data/Sum_Income_Per_Block_Group copy 2.csv')
+with open('data/acs2022_5yr_BlockGroup_data copy 2.geojson', 'r') as f:
+    geojson_data = json.load(f)
+
+# Merge data
+for feature in geojson_data['features']:
+    geoid = feature['properties']['geoid']
+    match = income_data[income_data['geoid'] == geoid]
+    if not match.empty:
+        feature['properties']['Total_LowIncome_units'] = int(match['Total_LowIncome_units'].values[0])
+    else:
+        feature['properties']['Total_LowIncome_units'] = "Data not available"
+
+m = folium.Map(location=[41.5868, -93.6250], zoom_start=12)
+
+# Define the GeoJson layer and add it to the map for search capability
+geojson_layer = folium.GeoJson(
+    data=geojson_data,
+    name='geojson'
+).add_to(m)
+
+folium.Choropleth(
+    geo_data=geojson_data,
+    name='choropleth',
+    data=income_data,
+    columns=['geoid', 'Total_LowIncome_units'],
+    key_on='feature.properties.geoid',
+    fill_color='YlOrRd',
+    fill_opacity=0.4,
+    line_opacity=0.5,
+    legend_name='Total Low Income Units in Des Moines'
+).add_to(m)
+
+# MarkerCluster Object
+marker_cluster = MarkerCluster().add_to(m)  
+
+# Adding markers to the cluster
+for feature in geojson_data['features']:
+    geom = shape(feature['geometry'])
+    center = geom.centroid
+    popup_content = f"""
+    <div style='font-family: "Arial", sans-serif; padding: 8px;'>
+        <h4 style='margin: 0; text-align: center;'>Block Group Information</h4>
+        <hr style='margin: 5px 0;'>
+        <strong>Name:</strong> {feature['properties'].get('name', 'No Name')}<br>
+        <strong>County:</strong> Polk, IA<br>
+        <strong>Total Low Income Units:</strong> {feature['properties'].get('Total_LowIncome_units', 'Data not available')}
+    </div>
+    """
+    folium.Marker(
+        [center.y, center.x],
+        popup=popup_content,
+        icon=folium.Icon(color='orange', icon='home')
+    ).add_to(marker_cluster)
+
+# Adding search functionality
+search = Search(
+    layer=geojson_layer,
+    geom_type='Polygon',
+    placeholder="Search for a block group by name",
+    collapsed=True,
+    search_label='name'  
+).add_to(m)
+
+# # Add layer control
+folium.LayerControl().add_to(m)
+
+m.save('Des_Moines_LowIncome_BlockGroup_Map.html')
+
+```
+
+![](Des_Moines_LowIncome_BlockGroup_Map.html){width="100%" height="600"}
+
+
+
+### <span style="color: brown;">Street level map for Low-Income Housing Tax Credit data
+
+```{python,message = FALSE}
+#| output: false
+#| echo: false
+#| message: false
+import pandas as pd
+import folium
+from folium.plugins import MarkerCluster, Search
+from branca.element import Template, MacroElement
+
+street_data = pd.read_csv('data/Street_level_geocodio_Des_Moines copy 2.csv')
+
+# Filter for low-income units; adjust this logic as per your definition of "low income"
+low_income_data = street_data[street_data['LI_UNITS'] > 0]
+
+
+m = folium.Map(location=[41.5868, -93.6250], zoom_start=12)
+
+marker_cluster = MarkerCluster().add_to(m)
+
+# Function to determine marker color based on the number of low income units
+def get_color(li_units):
+    if li_units < 5:
+        return 'green'
+    elif li_units < 10:
+        return 'orange'
+    else:
+        return 'red'
+
+
+for index, row in low_income_data.iterrows():
+    popup_content = f"""
+    <div style='font-family: "Helvetica", sans-serif; padding: 8px; border-radius: 5px; background: ghostwhite; width: 200px;'>
+        <h4 style="margin: 5px 0 5px 0; color: #0a4a7b;">{row['PROJECT_Name']}</h4>
+        <div style="color: #666;">
+            <strong>Street:</strong> {row['PROJ_ADDRESS']}<br>
+            <strong>Low Income Units:</strong> <span style="color: #ff5722;">{row['LI_UNITS']}</span><br>
+            <strong>Total Units:</strong> {row.get('T_UNITS', 'N/A')}<br>
+            <strong>Block Group:</strong> {row.get('Census Block Group', 'N/A')}<br>
+            <strong>Tract:</strong> {row.get('Census Tract Code', 'N/A')}
+        </div>
+    </div>
+    """
+    folium.Marker(
+        location=[row['Latitude'], row['Longitude']],
+        popup=popup_content,
+        icon=folium.Icon(color=get_color(row['LI_UNITS']), icon='home')
+    ).add_to(marker_cluster)
+
+template = """
+{% macro html(this, kwargs) %}
+<div style="position: fixed; 
+            bottom: 50px; left: 50px; width: 150px; height: 90px; 
+            border:2px solid grey; z-index:9999; font-size:14px;
+            ">&nbsp; Color Legend <br>
+            &nbsp; Green : < 5 units <br>
+            &nbsp; Orange : 5-10 units <br>
+            &nbsp; Red : > 10 units <br>
+</div>
+{% endmacro %}
+"""
+
+macro = MacroElement()
+macro._template = Template(template)
+
+m.get_root().add_child(macro)
+
+
+m.save('Des_Moines_Low_Income_Street_Map.html')
+
+
+```
+
+
+### <span style="color: brown;">Seniors Age Distributation map in Des Moines
+
+```{python,message = FALSE}
+#| output: false
+#| echo: false
+#| message: false
+import folium
+import geopandas as gpd
+from folium.plugins import Search
+
+geo_data = gpd.read_file('data/DesMoines_Age_Distributation copy 2.geojson')
+
+# Combining (Block), 'Block Group', and 'Tract' into a single search field so that there is no confusion in locating:
+geo_data['search_field'] = geo_data['name'] + " | Group: " + geo_data['Block Group'].astype(str) + " | Tract: " + geo_data['Tract'].astype(str)
+
+# Initialize the map centered around Des Moines
+des_moines_map = folium.Map(location=[41.5868, -93.6250], zoom_start=12, tiles='CartoDB positron')
+
+choropleth = folium.Choropleth(
+    geo_data=geo_data.to_json(),
+    data=geo_data,
+    columns=['geoid', 'Total Population For Seniors'],
+    key_on='feature.properties.geoid',
+    fill_color='YlOrRd',  # Color scheme
+    fill_opacity=0.7,
+    line_opacity=0.2,
+    legend_name='Total Population of Seniors'
+).add_to(des_moines_map)
+
+geojson_layer = folium.GeoJson(
+    geo_data,
+    name='Senior Population',
+    style_function=lambda feature: {
+        'fillColor': '#ffff00',
+        'color': 'black',
+        'weight': 2,
+        'dashArray': '5, 5'
+    },
+    tooltip=folium.GeoJsonTooltip(
+        fields=['name', 'Total Population For Seniors', 'Tract', 'Block Group'],
+        aliases=['Block Name:', 'Senior Population:', 'Tract No:', 'Block Group:'],
+        localize=True
+    )
+).add_to(des_moines_map)
+
+geojson_layer.add_child(folium.GeoJsonPopup(
+    fields=['name', 'Total Population For Seniors', 'Tract', 'Block Group'],
+    aliases=['Block Name:', 'Senior Population:', 'Tract No:', 'Block Group:'],
+    labels=True,
+    style="background-color: yellow;"))
+
+# search functionality 
+search = Search(
+    layer=geojson_layer,
+    geom_type='Polygon',
+    placeholder='Search by Block, Group, or Tract',  
+    collapsed=True,
+    search_label='search_field'
+).add_to(des_moines_map)
+
+des_moines_map.save('DesMoines_Seniors_Map.html')
+
+
+```
+
+![](DesMoines_Seniors_Map.html){width="100%" height="600"}
+
+
+### <span style="color: Orange;">New Directions in Learning
+
+-   <span style="color: green;">During the program,I've been learning about new technology, which is important for my future. AI is a big part of this, and I’m excited because it’s something that can really help in many jobs today.
+
+### <span style="color: Orange;">Skills I Want to Improve
+
+-   <span style="color: green;">For the rest of the program, I want to get better at using Python and working with AI. I also want to be better at making maps from data. These skills will help me do my projects better and faster. I also want to work on being a good team player and communicating well with others.
+
+### <span style="color: Orange;">Am I Meeting My Goals?
+
+-   <span style="color: green;">Yes, I think I am. When I started this program, I set some goals for what I wanted to learn and do. So far, I feel like I'm on the right path and making good progress. I’m using what I learn, and I'm excited to keep going and learn more.
+
+
+
